@@ -1,0 +1,181 @@
+ReviewID,ClaimID,SuggestedQueue,ReviewerQueue,OverrideReason,ReviewDate
+R00005,CL00005,Standard,Standard,,2025-03-22
+R00010,CL00010,Standard,Standard,,2025-04-07
+R00015,CL00015,Standard,Standard,,2025-12-05
+R00020,CL00020,Standard,Standard,Additional evidence required,2025-12-17
+R00025,CL00025,Standard,Standard,,2025-10-13
+R00030,CL00030,Standard,Standard,,2025-02-25
+R00035,CL00035,Standard,Standard,,2025-09-15
+R00040,CL00040,Standard,Standard,Additional evidence required,2025-07-23
+R00045,CL00045,Standard,Standard,,2025-04-26
+R00050,CL00050,Specialist,Specialist,,2025-06-25
+R00055,CL00055,Standard,Standard,,2025-05-10
+R00060,CL00060,Standard,Standard,Additional evidence required,2025-11-01
+R00065,CL00065,Standard,Standard,,2025-12-01
+R00070,CL00070,Standard,Standard,,2025-07-10
+R00075,CL00075,Standard,Standard,,2025-06-13
+R00080,CL00080,Standard,Standard,Additional evidence required,2025-05-01
+R00085,CL00085,Standard,Standard,,2025-10-22
+R00090,CL00090,Standard,Standard,,2025-02-15
+R00095,CL00095,Standard,Standard,,2025-05-18
+R00100,CL00100,Standard,Standard,Additional evidence required,2025-07-19
+R00105,CL00105,Specialist,Specialist,,2025-04-23
+R00110,CL00110,Standard,Standard,,2025-06-17
+R00115,CL00115,Specialist,Specialist,,2025-03-03
+R00120,CL00120,Standard,Standard,Additional evidence required,2025-12-19
+R00125,CL00125,Standard,Standard,,2025-01-25
+R00130,CL00130,Standard,Standard,,2025-01-07
+R00135,CL00135,Standard,Standard,,2025-03-03
+R00140,CL00140,Standard,Standard,Additional evidence required,2025-10-10
+R00145,CL00145,Standard,Standard,,2025-07-22
+R00150,CL00150,Standard,Standard,,2025-04-14
+R00155,CL00155,Standard,Standard,,2025-04-26
+R00160,CL00160,Standard,Standard,Additional evidence required,2025-08-06
+R00165,CL00165,Standard,Standard,,2025-10-26
+R00170,CL00170,Specialist,Specialist,,2025-03-18
+R00175,CL00175,Standard,Standard,,2025-09-12
+R00180,CL00180,Standard,Standard,Additional evidence required,2025-05-02
+R00185,CL00185,Standard,Standard,,2025-04-13
+R00190,CL00190,Standard,Standard,,2025-08-23
+R00195,CL00195,Standard,Standard,,2025-03-19
+R00200,CL00200,Standard,Standard,Additional evidence required,2025-01-15
+R00205,CL00205,Standard,Standard,,2025-01-10
+R00210,CL00210,Standard,Standard,,2025-04-27
+R00215,CL00215,Standard,Standard,,2025-02-26
+R00220,CL00220,Specialist,Standard,Additional evidence required,2025-08-14
+R00225,CL00225,Standard,Standard,,2025-02-06
+R00230,CL00230,Standard,Standard,,2025-11-06
+R00235,CL00235,Standard,Standard,,2025-02-15
+R00240,CL00240,Standard,Standard,Additional evidence required,2025-06-17
+R00245,CL00245,Standard,Standard,,2025-02-16
+R00250,CL00250,Standard,Standard,,2025-11-22
+R00255,CL00255,Standard,Standard,,2025-03-06
+R00260,CL00260,Standard,Standard,Additional evidence required,2025-04-21
+R00265,CL00265,Standard,Standard,,2025-12-02
+R00270,CL00270,Standard,Standard,,2025-04-13
+R00275,CL00275,Standard,Standard,,2025-04-27
+R00280,CL00280,Standard,Standard,Additional evidence required,2025-11-27
+R00285,CL00285,Standard,Standard,,2025-01-25
+R00290,CL00290,Standard,Standard,,2025-10-18
+R00295,CL00295,Standard,Standard,,2025-03-10
+R00300,CL00300,Standard,Standard,Additional evidence required,2025-04-09
+R00305,CL00305,Standard,Standard,,2025-06-17
+R00310,CL00310,Standard,Standard,,2025-02-01
+R00315,CL00315,Standard,Standard,,2025-03-10
+R00320,CL00320,Standard,Standard,Additional evidence required,2025-08-05
+R00325,CL00325,Standard,Standard,,2025-10-16
+R00330,CL00330,Standard,Standard,,2025-06-10
+R00335,CL00335,Standard,Standard,,2025-03-09
+R00340,CL00340,Standard,Standard,Additional evidence required,2025-05-02
+R00345,CL00345,Standard,Standard,,2025-10-19
+R00350,CL00350,Standard,Standard,,2025-09-17
+R00355,CL00355,Standard,Standard,,2025-12-15
+R00360,CL00360,Standard,Standard,Additional evidence required,2025-04-12
+R00365,CL00365,Standard,Standard,,2025-10-04
+R00370,CL00370,Standard,Standard,,2025-03-13
+R00375,CL00375,Standard,Standard,,2025-10-02
+R00380,CL00380,Standard,Standard,Additional evidence required,2025-11-11
+R00385,CL00385,Standard,Standard,,2025-03-21
+R00390,CL00390,Standard,Standard,,2025-02-10
+R00395,CL00395,Standard,Standard,,2025-03-20
+R00400,CL00400,Standard,Standard,Additional evidence required,2025-12-01
+R00405,CL00405,Specialist,Specialist,,2025-03-06
+R00410,CL00410,Standard,Standard,,2025-07-21
+R00415,CL00415,Standard,Standard,,2025-11-06
+R00420,CL00420,Standard,Standard,Additional evidence required,2025-03-01
+R00425,CL00425,Standard,Standard,,2025-06-05
+R00430,CL00430,Standard,Standard,,2025-07-18
+R00435,CL00435,Standard,Standard,,2025-02-02
+R00440,CL00440,Standard,Standard,Additional evidence required,2025-08-15
+R00445,CL00445,Standard,Standard,,2025-09-07
+R00450,CL00450,Standard,Standard,,2025-03-16
+R00455,CL00455,Specialist,Specialist,,2025-06-27
+R00460,CL00460,Standard,Standard,Additional evidence required,2025-01-05
+R00465,CL00465,Standard,Standard,,2025-03-15
+R00470,CL00470,Standard,Standard,,2025-02-14
+R00475,CL00475,Standard,Standard,,2025-01-01
+R00480,CL00480,Standard,Standard,Additional evidence required,2025-10-16
+R00485,CL00485,Standard,Standard,,2025-09-12
+R00490,CL00490,Standard,Standard,,2025-02-10
+R00495,CL00495,Standard,Standard,,2025-02-22
+R00500,CL00500,Standard,Standard,Additional evidence required,2025-11-22
+R00505,CL00505,Standard,Standard,,2025-08-15
+R00510,CL00510,Standard,Standard,,2025-07-05
+R00515,CL00515,Standard,Standard,,2025-05-13
+R00520,CL00520,Standard,Standard,Additional evidence required,2025-01-02
+R00525,CL00525,Standard,Standard,,2025-09-19
+R00530,CL00530,Standard,Standard,,2025-02-19
+R00535,CL00535,Standard,Standard,,2025-05-16
+R00540,CL00540,Standard,Standard,Additional evidence required,2025-02-12
+R00545,CL00545,Standard,Standard,,2025-01-14
+R00550,CL00550,Standard,Standard,,2025-07-15
+R00555,CL00555,Specialist,Specialist,,2025-06-23
+R00560,CL00560,Standard,Standard,Additional evidence required,2025-02-04
+R00565,CL00565,Standard,Standard,,2025-08-02
+R00570,CL00570,Standard,Standard,,2025-08-25
+R00575,CL00575,Standard,Standard,,2025-09-20
+R00580,CL00580,Standard,Standard,Additional evidence required,2025-11-18
+R00585,CL00585,Standard,Standard,,2025-08-15
+R00590,CL00590,Standard,Standard,,2025-03-07
+R00595,CL00595,Standard,Standard,,2025-04-10
+R00600,CL00600,Specialist,Standard,Additional evidence required,2025-09-09
+R00605,CL00605,Standard,Standard,,2025-02-23
+R00610,CL00610,Standard,Standard,,2025-08-04
+R00615,CL00615,Standard,Standard,,2025-08-04
+R00620,CL00620,Standard,Standard,Additional evidence required,2025-03-01
+R00625,CL00625,Standard,Standard,,2025-07-18
+R00630,CL00630,Standard,Standard,,2025-01-09
+R00635,CL00635,Standard,Standard,,2025-03-14
+R00640,CL00640,Standard,Standard,Additional evidence required,2025-04-02
+R00645,CL00645,Standard,Standard,,2025-03-12
+R00650,CL00650,Standard,Standard,,2025-09-03
+R00655,CL00655,Standard,Standard,,2025-08-09
+R00660,CL00660,Standard,Standard,Additional evidence required,2025-09-02
+R00665,CL00665,Standard,Standard,,2025-09-12
+R00670,CL00670,Standard,Standard,,2025-05-07
+R00675,CL00675,Specialist,Specialist,,2025-12-03
+R00680,CL00680,Specialist,Standard,Additional evidence required,2025-05-14
+R00685,CL00685,Standard,Standard,,2025-12-13
+R00690,CL00690,Standard,Standard,,2025-11-17
+R00695,CL00695,Standard,Standard,,2025-07-27
+R00700,CL00700,Specialist,Standard,Additional evidence required,2025-07-21
+R00705,CL00705,Standard,Standard,,2025-03-15
+R00710,CL00710,Standard,Standard,,2025-10-24
+R00715,CL00715,Standard,Standard,,2025-09-04
+R00720,CL00720,Standard,Standard,Additional evidence required,2025-08-21
+R00725,CL00725,Standard,Standard,,2025-04-02
+R00730,CL00730,Standard,Standard,,2025-02-10
+R00735,CL00735,Standard,Standard,,2025-08-12
+R00740,CL00740,Standard,Standard,Additional evidence required,2025-10-26
+R00745,CL00745,Standard,Standard,,2025-03-09
+R00750,CL00750,Specialist,Specialist,,2025-03-14
+R00755,CL00755,Specialist,Specialist,,2025-10-22
+R00760,CL00760,Standard,Standard,Additional evidence required,2025-04-03
+R00765,CL00765,Standard,Standard,,2025-09-05
+R00770,CL00770,Standard,Standard,,2025-03-14
+R00775,CL00775,Standard,Standard,,2025-11-08
+R00780,CL00780,Standard,Standard,Additional evidence required,2025-05-12
+R00785,CL00785,Standard,Standard,,2025-04-09
+R00790,CL00790,Standard,Standard,,2025-12-17
+R00795,CL00795,Standard,Standard,,2025-11-13
+R00800,CL00800,Standard,Standard,Additional evidence required,2025-05-20
+R00805,CL00805,Standard,Standard,,2025-08-25
+R00810,CL00810,Standard,Standard,,2025-07-12
+R00815,CL00815,Specialist,Specialist,,2025-02-11
+R00820,CL00820,Standard,Standard,Additional evidence required,2025-07-19
+R00825,CL00825,Standard,Standard,,2025-08-16
+R00830,CL00830,Standard,Standard,,2025-01-11
+R00835,CL00835,Specialist,Specialist,,2025-07-08
+R00840,CL00840,Standard,Standard,Additional evidence required,2025-05-02
+R00845,CL00845,Standard,Standard,,2025-03-08
+R00850,CL00850,Standard,Standard,,2025-07-04
+R00855,CL00855,Standard,Standard,,2025-11-19
+R00860,CL00860,Standard,Standard,Additional evidence required,2025-12-12
+R00865,CL00865,Standard,Standard,,2025-04-24
+R00870,CL00870,Standard,Standard,,2025-08-19
+R00875,CL00875,Standard,Standard,,2025-04-21
+R00880,CL00880,Standard,Standard,Additional evidence required,2025-11-16
+R00885,CL00885,Standard,Standard,,2025-07-03
+R00890,CL00890,Standard,Standard,,2025-10-24
+R00895,CL00895,Standard,Standard,,2025-11-01
+R00900,CL00900,Standard,Standard,Additional evidence required,2025-08-10

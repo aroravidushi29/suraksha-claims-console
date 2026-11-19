@@ -1,0 +1,25 @@
+TestID,ClaimID,Scenario,ExpectedHumanAction,TestInboxOnly
+T001,CL00001,Review queue conflict,Human review before external action,Yes
+T002,CL00002,Overdue claim digest,Human review before external action,Yes
+T003,CL00003,Missing document reminder,Human review before external action,Yes
+T004,CL00004,Review queue conflict,Human review before external action,Yes
+T005,CL00005,Overdue claim digest,Human review before external action,Yes
+T006,CL00006,Missing document reminder,Human review before external action,Yes
+T007,CL00007,Review queue conflict,Human review before external action,Yes
+T008,CL00008,Overdue claim digest,Human review before external action,Yes
+T009,CL00009,Missing document reminder,Human review before external action,Yes
+T010,CL00010,Review queue conflict,Human review before external action,Yes
+T011,CL00011,Overdue claim digest,Human review before external action,Yes
+T012,CL00012,Missing document reminder,Human review before external action,Yes
+T013,CL00013,Review queue conflict,Human review before external action,Yes
+T014,CL00014,Overdue claim digest,Human review before external action,Yes
+T015,CL00015,Missing document reminder,Human review before external action,Yes
+T016,CL00016,Review queue conflict,Human review before external action,Yes
+T017,CL00017,Overdue claim digest,Human review before external action,Yes
+T018,CL00018,Missing document reminder,Human review before external action,Yes
+T019,CL00019,Review queue conflict,Human review before external action,Yes
+T020,CL00020,Overdue claim digest,Human review before external action,Yes
+T021,CL00021,Missing document reminder,Human review before external action,Yes
+T022,CL00022,Review queue conflict,Human review before external action,Yes
+T023,CL00023,Overdue claim digest,Human review before external action,Yes
+T024,CL00024,Missing document reminder,Human review before external action,Yes
