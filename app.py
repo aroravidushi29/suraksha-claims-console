@@ -18,6 +18,15 @@ import streamlit as st
 YEL, DARK, GREY, LIGHT, PALE = "#FFE600", "#2E2E38", "#747480", "#C4C4CD", "#F2F2F5"
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data")
+os.makedirs(DATA, exist_ok=True)
+
+
+def fpath(name):
+    """Find a data file in ./data or next to app.py, whichever exists."""
+    for cand in (os.path.join(DATA, name), os.path.join(HERE, name)):
+        if os.path.exists(cand):
+            return cand
+    return os.path.join(DATA, name)
 LOG = os.path.join(DATA, "approvals_log.csv")
 
 st.set_page_config(page_title="SurakshaSetu Claims Console", page_icon="📋", layout="wide")
@@ -58,19 +67,19 @@ def load_claims():
             return df, "SQL Server (dbo.vw_ClaimMaster)"
         except Exception as e:  # fall back quietly, but say so
             st.session_state["sql_error"] = str(e)[:200]
-    df = pd.read_csv(os.path.join(DATA, "claims.csv"))
+    df = pd.read_csv(fpath("claims.csv"))
     return df, "local copy of the SQL view (data/claims.csv)"
 
 
 @st.cache_data(show_spinner=False)
 def load_aux():
-    hr = pd.read_csv(os.path.join(DATA, "human_reviews.csv"))
-    wf = pd.read_csv(os.path.join(DATA, "workflow_tests.csv"))
+    hr = pd.read_csv(fpath("human_reviews.csv"))
+    wf = pd.read_csv(fpath("workflow_tests.csv"))
     return hr, wf
 
 
 def load_bench():
-    return pd.read_csv(os.path.join(DATA, "benchmarks.csv"))
+    return pd.read_csv(fpath("benchmarks.csv"))
 
 
 def load_log():
@@ -380,7 +389,7 @@ with tabs[4]:
     edited = st.data_editor(bench[bench["Theme"].isin(theme)], use_container_width=True, hide_index=True, num_rows="dynamic", height=420, key="bench_editor")
     if st.button("Save benchmark table"):
         rest = bench[~bench["Theme"].isin(theme)]
-        pd.concat([edited, rest]).to_csv(os.path.join(DATA, "benchmarks.csv"), index=False)
+        pd.concat([edited, rest]).to_csv(fpath("benchmarks.csv"), index=False)
         st.success("Saved.")
     st.markdown("<div class='sowhat'>Regulators now require collect, decide, explain; Indian insurers already run capped fast lanes. Our design is that pattern applied to this data.</div>", unsafe_allow_html=True)
 
