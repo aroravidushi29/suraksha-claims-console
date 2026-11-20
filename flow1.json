@@ -1,0 +1,731 @@
+{
+ "id": "p08flow100000000",
+ "name": "P08 Flow1 Missing document reminder",
+ "nodes": [
+  {
+   "parameters": {
+    "path": "p08-flow1",
+    "responseMode": "onReceived",
+    "options": {}
+   },
+   "id": "85afb3ce-8f36-4a0f-81fa-720e12b6166f",
+   "name": "Run test case (webhook)",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    0,
+    300
+   ],
+   "webhookId": "03f72ef3-6ccc-4d5d-8cc2-a169779ef1fd"
+  },
+  {
+   "parameters": {
+    "fileSelector": "/Users/Tanush/Downloads/P08_Group9_M5/work/P08_WorkflowTests.csv",
+    "options": {}
+   },
+   "id": "49c96f72-f9dd-4be3-80a3-a4dc52bc0bc1",
+   "name": "Read test sheet",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    220,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "options": {}
+   },
+   "id": "779eed0e-1c32-4250-85b1-586bb9b28c59",
+   "name": "Parse CSV",
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1,
+   "position": [
+    440,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "f162ccdf-795f-4f90-89db-b943e5b46a61",
+       "leftValue": "={{ $json.TestID }}",
+       "rightValue": "={{ $('Run test case (webhook)').first().json.query.TestID }}",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "looseTypeValidation": true,
+    "options": {}
+   },
+   "id": "52c2bcdc-d106-4050-bb78-4b0071b3d12c",
+   "name": "Pick this TestID",
+   "type": "n8n-nodes-base.filter",
+   "typeVersion": 2,
+   "position": [
+    660,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "346f64a0-e112-4506-8f9e-59654d62e162",
+       "leftValue": "={{ $json.Scenario }}",
+       "rightValue": "Missing document reminder",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      },
+      {
+       "id": "2e246ac2-5f52-4540-b28e-183075cb2d9c",
+       "leftValue": "={{ $json.Status }}",
+       "rightValue": "Open",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      },
+      {
+       "id": "38bca84a-5182-4df9-bda0-2698bc5ec3ba",
+       "leftValue": "={{ Number($json.MissingDocs) }}",
+       "rightValue": 0,
+       "operator": {
+        "type": "number",
+        "operation": "gt"
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "looseTypeValidation": true,
+    "options": {}
+   },
+   "id": "4e6dee2e-5a61-480e-b470-57e737962d2e",
+   "name": "Data check",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    880,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "assignments": {
+     "assignments": [
+      {
+       "id": "806385d3-978a-40f4-8881-22413896e5e1",
+       "name": "Subject",
+       "value": "=[TEST] Document reminder – {{ $('Pick this TestID').first().json.ClaimID }}",
+       "type": "string"
+      },
+      {
+       "id": "336357cd-917e-44a9-b0df-55781c3daa41",
+       "name": "Body",
+       "value": "=Reminder draft (TEST ONLY) for claim {{ $('Pick this TestID').first().json.ClaimID }}: our records show the Supporting Evidence document has not been received. Please upload it to the portal. This draft was generated automatically and requires a human to approve before sending.",
+       "type": "string"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "cd3ffa02-11b5-4ac6-925e-22562ff86bc3",
+   "name": "Draft (TEST ONLY)",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    1100,
+    160
+   ]
+  },
+  {
+   "parameters": {
+    "fromEmail": "p08-flows@p08-test.local",
+    "toEmail": "m5.approver@p08-test.local",
+    "subject": "=Approve reminder for {{ $('Pick this TestID').first().json.ClaimID }}",
+    "emailFormat": "text",
+    "text": "=A workflow has prepared an action that needs a person to decide.\n\nTest: {{ $('Pick this TestID').first().json.TestID }}  Claim: {{ $('Pick this TestID').first().json.ClaimID }}  Scenario: {{ $('Pick this TestID').first().json.Scenario }}\nStatus: {{ $('Pick this TestID').first().json.Status }}, missing documents: {{ $('Pick this TestID').first().json.MissingDocs }}, days: {{ $('Pick this TestID').first().json.Days }}, cover used: {{ $('Pick this TestID').first().json.CoverUsePct }}%\n\nDraft:\n{{ $json.Body }}\n\nOpen this link to decide (nothing is sent until you do):\n{{ $execution.resumeFormUrl }}",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "id": "4f85a42b-25ed-40aa-aef1-74ebccf9556e",
+   "name": "Request human approval",
+   "type": "n8n-nodes-base.emailSend",
+   "typeVersion": 2.1,
+   "position": [
+    1320,
+    160
+   ],
+   "credentials": {
+    "smtp": {
+     "id": "p08smtp00000001",
+     "name": "Local P08 test inbox"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "resume": "form",
+    "formTitle": "P08 human approval",
+    "formDescription": "Test-only simulation. Nothing is sent unless a named person approves.",
+    "formFields": {
+     "values": [
+      {
+       "fieldLabel": "Approver name",
+       "requiredField": true,
+       "placeholder": "Your full name"
+      },
+      {
+       "fieldLabel": "Decision",
+       "fieldType": "dropdown",
+       "fieldOptions": {
+        "values": [
+         {
+          "option": "Approve"
+         },
+         {
+          "option": "Reject"
+         }
+        ]
+       },
+       "requiredField": true
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "139a4e78-3485-4aba-9e62-87be22465a21",
+   "name": "Wait for human decision",
+   "type": "n8n-nodes-base.wait",
+   "typeVersion": 1.1,
+   "position": [
+    1540,
+    160
+   ],
+   "webhookId": "4bb00458-c8e1-42d5-99a8-691abeacddec"
+  },
+  {
+   "parameters": {
+    "assignments": {
+     "assignments": [
+      {
+       "id": "b022e996-f3e5-4939-a2d5-9550c5de97a4",
+       "name": "TestID",
+       "value": "={{ $('Pick this TestID').first().json.TestID }}",
+       "type": "string"
+      },
+      {
+       "id": "9f17d76d-091b-4c09-8197-84713970b486",
+       "name": "ClaimID",
+       "value": "={{ $('Pick this TestID').first().json.ClaimID }}",
+       "type": "string"
+      },
+      {
+       "id": "dce92c88-6c51-42dd-acc9-e7e0565a4d6d",
+       "name": "Scenario",
+       "value": "={{ $('Pick this TestID').first().json.Scenario }}",
+       "type": "string"
+      },
+      {
+       "id": "ea8b2446-eee6-4e08-ad77-b68dc0e7f146",
+       "name": "ShouldFire",
+       "value": "={{ $('Pick this TestID').first().json.ShouldFire }}",
+       "type": "string"
+      },
+      {
+       "id": "1708335c-39ff-48d8-ad67-a6feaa34e0cf",
+       "name": "Fired",
+       "value": "No",
+       "type": "string"
+      },
+      {
+       "id": "82ceb725-f9ed-4957-b469-761d21904ddc",
+       "name": "Approver",
+       "value": "",
+       "type": "string"
+      },
+      {
+       "id": "cbbafdb6-0184-4a72-a130-32ecb99ddb6e",
+       "name": "Decision",
+       "value": "Not fired: data check failed (closed claim or no missing document)",
+       "type": "string"
+      },
+      {
+       "id": "4f6c4b0f-94e0-4b11-8e31-bbad7d682df5",
+       "name": "DecidedAt",
+       "value": "={{ $now.toISO() }}",
+       "type": "string"
+      },
+      {
+       "id": "5b474b77-dd2d-493d-978c-f358a6d25018",
+       "name": "Flow",
+       "value": "={{ $workflow.name }}",
+       "type": "string"
+      },
+      {
+       "id": "b12c37d0-f3a4-4ddc-9c2e-5bfb6df4567f",
+       "name": "ExecutionId",
+       "value": "={{ $execution.id }}",
+       "type": "string"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "569dad5d-028a-4033-b53f-cf14eddfbbb4",
+   "name": "Log: not fired",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    1100,
+    460
+   ]
+  },
+  {
+   "parameters": {
+    "operation": "toJson",
+    "mode": "each",
+    "options": {
+     "fileName": "={{ $json.TestID }}.json"
+    }
+   },
+   "id": "92439bb7-ffec-4df7-9be5-0aaad7a1d16f",
+   "name": "Convert log to JSON",
+   "type": "n8n-nodes-base.convertToFile",
+   "typeVersion": 1.1,
+   "position": [
+    2420,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "operation": "write",
+    "fileName": "=/Users/Tanush/Downloads/P08_Group9_M5/work/runlog/{{ $binary.data.fileName.replace('.json','') }}__flow1.json",
+    "dataPropertyName": "data",
+    "options": {}
+   },
+   "id": "41882468-8f42-4e40-99da-6ed6c5036b83",
+   "name": "Write run log",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    2640,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "ffb49f9b-ee7c-4fec-aaa8-cf1d7c984292",
+       "leftValue": "={{ $json.Decision }}",
+       "rightValue": "Approve",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "looseTypeValidation": true,
+    "options": {}
+   },
+   "id": "c15adb16-cf1a-46ac-850d-20597cd25240",
+   "name": "Approved?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    1760,
+    160
+   ]
+  },
+  {
+   "parameters": {
+    "fromEmail": "p08-flows@p08-test.local",
+    "toEmail": "group9.p08.test@p08-test.local",
+    "subject": "={{ $('Draft (TEST ONLY)').first().json.Subject }}",
+    "emailFormat": "text",
+    "text": "={{ $('Draft (TEST ONLY)').first().json.Body }}",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "id": "a3537844-62cf-442e-93da-2fab74922164",
+   "name": "Send to TEST inbox",
+   "type": "n8n-nodes-base.emailSend",
+   "typeVersion": 2.1,
+   "position": [
+    1980,
+    60
+   ],
+   "credentials": {
+    "smtp": {
+     "id": "p08smtp00000001",
+     "name": "Local P08 test inbox"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "assignments": {
+     "assignments": [
+      {
+       "id": "f1b726c5-7f10-4f01-93f8-281249f27f1f",
+       "name": "TestID",
+       "value": "={{ $('Pick this TestID').first().json.TestID }}",
+       "type": "string"
+      },
+      {
+       "id": "8f511e1d-49e2-44a8-ad3c-58a65b4b04d2",
+       "name": "ClaimID",
+       "value": "={{ $('Pick this TestID').first().json.ClaimID }}",
+       "type": "string"
+      },
+      {
+       "id": "2999a59f-b84e-4b5c-80d4-15fdf506b22b",
+       "name": "Scenario",
+       "value": "={{ $('Pick this TestID').first().json.Scenario }}",
+       "type": "string"
+      },
+      {
+       "id": "863bf1ae-91b0-4937-97b3-0a06cb46384f",
+       "name": "ShouldFire",
+       "value": "={{ $('Pick this TestID').first().json.ShouldFire }}",
+       "type": "string"
+      },
+      {
+       "id": "4bd600e1-6aa9-42a7-8756-2cbf9e9722cf",
+       "name": "Fired",
+       "value": "Yes",
+       "type": "string"
+      },
+      {
+       "id": "000c63f3-be93-4a2b-89ef-cf22f82baab6",
+       "name": "Approver",
+       "value": "={{ $('Wait for human decision').first().json['Approver name'] }}",
+       "type": "string"
+      },
+      {
+       "id": "6864d626-519e-41f6-aadd-452f071c62a8",
+       "name": "Decision",
+       "value": "Approved and sent to test inbox",
+       "type": "string"
+      },
+      {
+       "id": "7f288bd5-fbfc-447f-9e25-73e1b2ed23b6",
+       "name": "DecidedAt",
+       "value": "={{ $now.toISO() }}",
+       "type": "string"
+      },
+      {
+       "id": "6f1b5b56-3310-4d1d-96e3-61cbb76097f5",
+       "name": "Flow",
+       "value": "={{ $workflow.name }}",
+       "type": "string"
+      },
+      {
+       "id": "8432e37c-93f3-49fd-9b56-7c73165c9996",
+       "name": "ExecutionId",
+       "value": "={{ $execution.id }}",
+       "type": "string"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "73f86a41-46b0-49cc-b0ed-485c7117ed87",
+   "name": "Log: approved and sent",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    2200,
+    60
+   ]
+  },
+  {
+   "parameters": {
+    "assignments": {
+     "assignments": [
+      {
+       "id": "4dd2e0e8-2efd-4d14-ac54-214f18e03242",
+       "name": "TestID",
+       "value": "={{ $('Pick this TestID').first().json.TestID }}",
+       "type": "string"
+      },
+      {
+       "id": "a30c979b-f40f-4203-ad50-7d8f6b56f488",
+       "name": "ClaimID",
+       "value": "={{ $('Pick this TestID').first().json.ClaimID }}",
+       "type": "string"
+      },
+      {
+       "id": "9db02168-c258-4594-8c0a-35a61343c82b",
+       "name": "Scenario",
+       "value": "={{ $('Pick this TestID').first().json.Scenario }}",
+       "type": "string"
+      },
+      {
+       "id": "219789ae-753e-4329-a22e-35afb7a9e30f",
+       "name": "ShouldFire",
+       "value": "={{ $('Pick this TestID').first().json.ShouldFire }}",
+       "type": "string"
+      },
+      {
+       "id": "48f811f3-944c-4b2d-bf69-3518c24bc085",
+       "name": "Fired",
+       "value": "Yes",
+       "type": "string"
+      },
+      {
+       "id": "2920e186-795f-482e-8b1b-5c69b2977bf5",
+       "name": "Approver",
+       "value": "={{ $('Wait for human decision').first().json['Approver name'] }}",
+       "type": "string"
+      },
+      {
+       "id": "2fc28a5c-ce03-45ad-8b9d-4859f5954ae7",
+       "name": "Decision",
+       "value": "Rejected by reviewer: nothing sent",
+       "type": "string"
+      },
+      {
+       "id": "b2c1e73d-4c41-4236-baeb-af452bbb58f9",
+       "name": "DecidedAt",
+       "value": "={{ $now.toISO() }}",
+       "type": "string"
+      },
+      {
+       "id": "9ed070a1-eb5e-44bf-aa3e-042e665388cc",
+       "name": "Flow",
+       "value": "={{ $workflow.name }}",
+       "type": "string"
+      },
+      {
+       "id": "8c148305-6a02-4c24-99a3-dd91856039f9",
+       "name": "ExecutionId",
+       "value": "={{ $execution.id }}",
+       "type": "string"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "3eff3230-e247-4700-9716-77bac513d72a",
+   "name": "Log: rejected, nothing sent",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    2200,
+    260
+   ]
+  }
+ ],
+ "connections": {
+  "Run test case (webhook)": {
+   "main": [
+    [
+     {
+      "node": "Read test sheet",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Read test sheet": {
+   "main": [
+    [
+     {
+      "node": "Parse CSV",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Parse CSV": {
+   "main": [
+    [
+     {
+      "node": "Pick this TestID",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pick this TestID": {
+   "main": [
+    [
+     {
+      "node": "Data check",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Data check": {
+   "main": [
+    [
+     {
+      "node": "Draft (TEST ONLY)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Log: not fired",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Draft (TEST ONLY)": {
+   "main": [
+    [
+     {
+      "node": "Request human approval",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Request human approval": {
+   "main": [
+    [
+     {
+      "node": "Wait for human decision",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Log: not fired": {
+   "main": [
+    [
+     {
+      "node": "Convert log to JSON",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Convert log to JSON": {
+   "main": [
+    [
+     {
+      "node": "Write run log",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Wait for human decision": {
+   "main": [
+    [
+     {
+      "node": "Approved?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Approved?": {
+   "main": [
+    [
+     {
+      "node": "Send to TEST inbox",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Log: rejected, nothing sent",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Send to TEST inbox": {
+   "main": [
+    [
+     {
+      "node": "Log: approved and sent",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Log: approved and sent": {
+   "main": [
+    [
+     {
+      "node": "Convert log to JSON",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Log: rejected, nothing sent": {
+   "main": [
+    [
+     {
+      "node": "Convert log to JSON",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {},
+ "versionId": "919e898f-8a8a-4bc3-a60f-35db41bfb2c5"
+}

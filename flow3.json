@@ -1,0 +1,565 @@
+{
+ "id": "p08flow300000000",
+ "name": "P08 Flow3 Queue override",
+ "nodes": [
+  {
+   "parameters": {
+    "path": "p08-flow3",
+    "responseMode": "onReceived",
+    "options": {}
+   },
+   "id": "38e15df8-e7fc-425c-bd3f-46db174e3f37",
+   "name": "Run test case (webhook)",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    0,
+    300
+   ],
+   "webhookId": "e9a4a2d6-ba1a-4bb7-af9e-f42c3fa15cd2"
+  },
+  {
+   "parameters": {
+    "fileSelector": "/Users/Tanush/Downloads/P08_Group9_M5/work/P08_WorkflowTests.csv",
+    "options": {}
+   },
+   "id": "dfa27de3-5218-47b7-9221-d6e56e4e097b",
+   "name": "Read test sheet",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    220,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "options": {}
+   },
+   "id": "71ee9d17-7681-4011-8628-77f0b447466d",
+   "name": "Parse CSV",
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1,
+   "position": [
+    440,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "9a1539c0-43aa-445b-a5fa-501b9c0854ae",
+       "leftValue": "={{ $json.TestID }}",
+       "rightValue": "={{ $('Run test case (webhook)').first().json.query.TestID }}",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "looseTypeValidation": true,
+    "options": {}
+   },
+   "id": "67c06975-7c88-421d-9497-9b1bf9229ff2",
+   "name": "Pick this TestID",
+   "type": "n8n-nodes-base.filter",
+   "typeVersion": 2,
+   "position": [
+    660,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "f951b849-71b4-43cf-906c-f48b98e588d7",
+       "leftValue": "={{ $json.Scenario }}",
+       "rightValue": "Review queue conflict",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      },
+      {
+       "id": "94625e0e-15c9-4a53-8baa-d58a3c0290d1",
+       "leftValue": "={{ $json.HasReview }}",
+       "rightValue": "Yes",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      },
+      {
+       "id": "eb747587-24ee-4a48-b4da-57fbaaf5ca89",
+       "leftValue": "={{ $json.QueueChanged }}",
+       "rightValue": "Yes",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "looseTypeValidation": true,
+    "options": {}
+   },
+   "id": "64906e30-70e3-4037-aabe-06819c5add80",
+   "name": "Data check",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2,
+   "position": [
+    880,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "assignments": {
+     "assignments": [
+      {
+       "id": "d807f3e4-67b3-44fc-b6ce-f02d56a81ec0",
+       "name": "Subject",
+       "value": "=Override reason required – {{ $('Pick this TestID').first().json.ClaimID }}",
+       "type": "string"
+      },
+      {
+       "id": "caff4495-d960-4e01-a6aa-9592914eef48",
+       "name": "Body",
+       "value": "=Claim {{ $('Pick this TestID').first().json.ClaimID }}: suggested queue {{ $('Pick this TestID').first().json.SuggestedQueue }}, reviewer chose {{ $('Pick this TestID').first().json.ReviewerQueue }}. Please record the override reason. Nothing is sent externally.",
+       "type": "string"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "654fd598-5460-4e98-a69c-6b5e4d076e77",
+   "name": "Draft (TEST ONLY)",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    1100,
+    160
+   ]
+  },
+  {
+   "parameters": {
+    "fromEmail": "p08-flows@p08-test.local",
+    "toEmail": "m5.approver@p08-test.local",
+    "subject": "=Override reason required for {{ $('Pick this TestID').first().json.ClaimID }} (suggested {{ $('Pick this TestID').first().json.SuggestedQueue }}, reviewer chose {{ $('Pick this TestID').first().json.ReviewerQueue }})",
+    "emailFormat": "text",
+    "text": "=A workflow has prepared an action that needs a person to decide.\n\nTest: {{ $('Pick this TestID').first().json.TestID }}  Claim: {{ $('Pick this TestID').first().json.ClaimID }}  Scenario: {{ $('Pick this TestID').first().json.Scenario }}\nStatus: {{ $('Pick this TestID').first().json.Status }}, missing documents: {{ $('Pick this TestID').first().json.MissingDocs }}, days: {{ $('Pick this TestID').first().json.Days }}, cover used: {{ $('Pick this TestID').first().json.CoverUsePct }}%\n\nDraft:\n{{ $json.Body }}\n\nOpen this link to decide (nothing is sent until you do):\n{{ $execution.resumeFormUrl }}",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "id": "78bffec7-643f-46f1-9cb8-4b6dbf959353",
+   "name": "Request human approval",
+   "type": "n8n-nodes-base.emailSend",
+   "typeVersion": 2.1,
+   "position": [
+    1320,
+    160
+   ],
+   "credentials": {
+    "smtp": {
+     "id": "p08smtp00000001",
+     "name": "Local P08 test inbox"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "resume": "form",
+    "formTitle": "P08 human approval",
+    "formDescription": "Test-only simulation. Nothing is sent unless a named person approves.",
+    "formFields": {
+     "values": [
+      {
+       "fieldLabel": "Reviewer name",
+       "requiredField": true,
+       "placeholder": "Your full name"
+      },
+      {
+       "fieldLabel": "Override reason",
+       "fieldType": "dropdown",
+       "fieldOptions": {
+        "values": [
+         {
+          "option": "Additional evidence required"
+         },
+         {
+          "option": "Claimant request"
+         },
+         {
+          "option": "Policy exclusion"
+         },
+         {
+          "option": "Other – see comments"
+         }
+        ]
+       },
+       "requiredField": true
+      },
+      {
+       "fieldLabel": "Comments",
+       "fieldType": "textarea",
+       "requiredField": false
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "dbbd787f-20da-443b-be63-3dff2619c41a",
+   "name": "Wait for human decision",
+   "type": "n8n-nodes-base.wait",
+   "typeVersion": 1.1,
+   "position": [
+    1540,
+    160
+   ],
+   "webhookId": "11477b5b-9708-46bf-9982-1dd609a3a8ae"
+  },
+  {
+   "parameters": {
+    "assignments": {
+     "assignments": [
+      {
+       "id": "40f3b687-0bf7-44a1-97d9-0eba834cb7f6",
+       "name": "TestID",
+       "value": "={{ $('Pick this TestID').first().json.TestID }}",
+       "type": "string"
+      },
+      {
+       "id": "c9250cdc-bd23-4b1d-88c6-15b26c1fe680",
+       "name": "ClaimID",
+       "value": "={{ $('Pick this TestID').first().json.ClaimID }}",
+       "type": "string"
+      },
+      {
+       "id": "99c4dc13-09b0-4fe8-927f-ac5d939b011d",
+       "name": "Scenario",
+       "value": "={{ $('Pick this TestID').first().json.Scenario }}",
+       "type": "string"
+      },
+      {
+       "id": "7ae7c720-f3a9-4c07-a6b7-76cef220dac0",
+       "name": "ShouldFire",
+       "value": "={{ $('Pick this TestID').first().json.ShouldFire }}",
+       "type": "string"
+      },
+      {
+       "id": "6ed451f0-75b3-458a-88e0-aa0d3e3972d0",
+       "name": "Fired",
+       "value": "No",
+       "type": "string"
+      },
+      {
+       "id": "340d9c18-34f6-4397-b721-ad9e04142731",
+       "name": "Approver",
+       "value": "",
+       "type": "string"
+      },
+      {
+       "id": "58117f37-2f20-48c5-b3cb-53be9c0b38fb",
+       "name": "Decision",
+       "value": "Not fired: no override occurred, so no reason is recorded",
+       "type": "string"
+      },
+      {
+       "id": "f87bbbbf-b39a-4637-9fc6-aa8d74e74d3c",
+       "name": "DecidedAt",
+       "value": "={{ $now.toISO() }}",
+       "type": "string"
+      },
+      {
+       "id": "5051af22-5b9c-4617-8ffe-7e52cca2f914",
+       "name": "Flow",
+       "value": "={{ $workflow.name }}",
+       "type": "string"
+      },
+      {
+       "id": "042272d1-3fd1-4e3b-a1d7-fd956fa6b89b",
+       "name": "ExecutionId",
+       "value": "={{ $execution.id }}",
+       "type": "string"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "4d82af58-15c5-44fc-a772-19baff3f24ea",
+   "name": "Log: not fired",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    1100,
+    460
+   ]
+  },
+  {
+   "parameters": {
+    "operation": "toJson",
+    "mode": "each",
+    "options": {
+     "fileName": "={{ $json.TestID }}.json"
+    }
+   },
+   "id": "17a64cc9-c32d-43f8-bfb4-f0ae7a1c37f0",
+   "name": "Convert log to JSON",
+   "type": "n8n-nodes-base.convertToFile",
+   "typeVersion": 1.1,
+   "position": [
+    2420,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "operation": "write",
+    "fileName": "=/Users/Tanush/Downloads/P08_Group9_M5/work/runlog/{{ $binary.data.fileName.replace('.json','') }}__flow3.json",
+    "dataPropertyName": "data",
+    "options": {}
+   },
+   "id": "f01926e6-8d36-4d13-9f7a-003587f7921e",
+   "name": "Write run log",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    2640,
+    300
+   ]
+  },
+  {
+   "parameters": {
+    "assignments": {
+     "assignments": [
+      {
+       "id": "6d67015f-d439-4f3c-8346-9b654c4358a8",
+       "name": "TestID",
+       "value": "={{ $('Pick this TestID').first().json.TestID }}",
+       "type": "string"
+      },
+      {
+       "id": "acb952b5-2848-487c-b52c-7d349e70ccf5",
+       "name": "ClaimID",
+       "value": "={{ $('Pick this TestID').first().json.ClaimID }}",
+       "type": "string"
+      },
+      {
+       "id": "7ca1d795-023b-4db4-b043-b8a7a92d6f86",
+       "name": "Scenario",
+       "value": "={{ $('Pick this TestID').first().json.Scenario }}",
+       "type": "string"
+      },
+      {
+       "id": "ce01e491-c862-404f-bc77-7a312b95c654",
+       "name": "ShouldFire",
+       "value": "={{ $('Pick this TestID').first().json.ShouldFire }}",
+       "type": "string"
+      },
+      {
+       "id": "fb187788-95f1-43fb-ab1e-d23c41a864a0",
+       "name": "Fired",
+       "value": "Yes",
+       "type": "string"
+      },
+      {
+       "id": "eee49c73-aee2-4518-a206-9545af74a416",
+       "name": "Approver",
+       "value": "={{ $json['Reviewer name'] }}",
+       "type": "string"
+      },
+      {
+       "id": "0eba9d88-2cd6-42e6-a637-e5946e5b5caa",
+       "name": "Decision",
+       "value": "=Override reason: {{ $json['Override reason'] }}{{ $json.Comments ? ' | ' + $json.Comments : '' }}",
+       "type": "string"
+      },
+      {
+       "id": "519c5e12-a0e5-47b0-92d7-57a740ce8c5e",
+       "name": "DecidedAt",
+       "value": "={{ $now.toISO() }}",
+       "type": "string"
+      },
+      {
+       "id": "a09471f2-66fe-4332-b15d-f517dde45fd6",
+       "name": "Flow",
+       "value": "={{ $workflow.name }}",
+       "type": "string"
+      },
+      {
+       "id": "3b77c9b4-e1ae-4aab-9df1-cfdb4e11f4d2",
+       "name": "ExecutionId",
+       "value": "={{ $execution.id }}",
+       "type": "string"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "f76603b0-3795-48d4-9757-d9d49109dea2",
+   "name": "Log: override reason recorded",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    2200,
+    160
+   ]
+  }
+ ],
+ "connections": {
+  "Run test case (webhook)": {
+   "main": [
+    [
+     {
+      "node": "Read test sheet",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Read test sheet": {
+   "main": [
+    [
+     {
+      "node": "Parse CSV",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Parse CSV": {
+   "main": [
+    [
+     {
+      "node": "Pick this TestID",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pick this TestID": {
+   "main": [
+    [
+     {
+      "node": "Data check",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Data check": {
+   "main": [
+    [
+     {
+      "node": "Draft (TEST ONLY)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Log: not fired",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Draft (TEST ONLY)": {
+   "main": [
+    [
+     {
+      "node": "Request human approval",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Request human approval": {
+   "main": [
+    [
+     {
+      "node": "Wait for human decision",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Log: not fired": {
+   "main": [
+    [
+     {
+      "node": "Convert log to JSON",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Convert log to JSON": {
+   "main": [
+    [
+     {
+      "node": "Write run log",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Wait for human decision": {
+   "main": [
+    [
+     {
+      "node": "Log: override reason recorded",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Log: override reason recorded": {
+   "main": [
+    [
+     {
+      "node": "Convert log to JSON",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1"
+ },
+ "pinData": {},
+ "versionId": "ce3ffbb1-a42e-45b0-9c79-37a9630d1931"
+}
